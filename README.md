@@ -4,6 +4,8 @@ In-memory cache for Go: sharded LRU / W-TinyLFU, with snapshot & AOF persistence
 
 `cache-mem` is the in-process adapter for [`github.com/ubgo/cache`](https://github.com/ubgo/cache). It is a fast, sharded, weight-aware in-memory cache with two pluggable eviction policies (classic **LRU** and a Caffeine-style **Adaptive Window-TinyLFU**), optional **point-in-time snapshots**, periodic **checkpointing**, and **append-only-file (AOF) durability** for near-zero-loss restarts. It implements the full `cache.Cache` interface and passes the shared `cachetest.Run` conformance suite, so it is a drop-in for any code written against the ubgo cache contract.
 
+> **Documentation:** a full per-feature cookbook with use cases and runnable snippets for every option, policy, and method lives in [`docs/README.md`](docs/README.md).
+
 ## Why cache-mem
 
 - **No network, no serialization tax.** Values live in process memory; reads are a sharded map lookup plus a defensive copy.
