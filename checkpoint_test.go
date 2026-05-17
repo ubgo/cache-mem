@@ -1,3 +1,5 @@
+// checkpoint_test.go — tests for the periodic atomic checkpoint loop and restore-on-startup.
+
 package memcache_test
 
 import (

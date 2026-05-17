@@ -1,3 +1,29 @@
+// policy.go — eviction policies: LRU and Adaptive Window-TinyLFU (package memcache, github.com/ubgo/cache-mem).
+//
+// Package role: memcache is the in-memory adapter of the ubgo/cache
+// family. See doc.go for the package overview.
+//
+// This file: the evictPolicy interface and its two implementations,
+// chosen per shard via WithPolicy. All methods are called with the
+// owning shard's lock held; a policy never touches shard state directly —
+// it removes displaced keys via the injected drop callback. lruPolicy is
+// a plain list+map LRU. wtinyPolicy is Caffeine-style Window-TinyLFU: a
+// ~1%-of-capacity LRU admission window in front of a segmented-LRU main
+// region (probation + protected, protected = 80% of main via
+// wtinyProtectedFrac); a window tail must beat the main region's coldest
+// victim in a Count-Min frequency duel to be admitted, which is what
+// rejects one-hit-wonders and scan floods. cmSketch is a 4-row Count-Min
+// sketch with 4-bit counters packed 2/byte; estimate() takes the MIN
+// across rows (Count-Min only over-estimates).
+//
+// AI-context: the frozen algorithm details an AI must not "simplify":
+// (1) age() uses the 0x77 (0111_0111) mask so one `(b>>1)&0x77` halves
+// BOTH packed nibbles without the high nibble's low bit bleeding into the
+// low nibble — this aging is what makes the policy adaptive, not
+// all-time-LFU; (2) add() returns `cand.key != key` so the caller drops
+// the just-inserted entry only when IT lost the duel, not when an older
+// window key was the loser.
+
 package memcache
 
 import (

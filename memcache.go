@@ -1,3 +1,24 @@
+// memcache.go — the sharded in-memory cache.Cache adapter core (package memcache, github.com/ubgo/cache-mem).
+//
+// Package role: memcache is the in-memory adapter of the ubgo/cache
+// family — a sharded, weight-aware store with lazy + background TTL,
+// pluggable eviction, and optional snapshot/checkpoint/AOF durability.
+// See doc.go for the full package overview and usage examples.
+//
+// This file: the Cache, shard, entry and iter types plus every
+// cache.Cache method (Get/Set/Del/Incr/Iterate/Stats/Close, ...) and the
+// internal store/getEntry/dropEntry/deleteEntry/trimBytes helpers. Keys
+// map to one of N (power-of-two) shards via a per-cache seeded maphash so
+// shardFor's modulo collapses to `& c.mask`; each shard has its own mutex
+// and independent policy. New replays an existing AOF into memory (via
+// the internal helpers, NOT public Set, so replay does not re-append)
+// before opening the live append handle and starting the loops.
+//
+// AI-context: this is a decorator over plain maps — every public op locks
+// exactly the owning shard (whole-cache ops lock shards serially, never
+// all at once, so they can't deadlock); counters are atomics; the closed
+// flag short-circuits every op to cache.ErrClosed and Close is idempotent.
+
 package memcache
 
 import (

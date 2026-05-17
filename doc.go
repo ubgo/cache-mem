@@ -1,3 +1,18 @@
+// doc.go — canonical package doc for the in-memory adapter (package memcache, github.com/ubgo/cache-mem).
+//
+// Package role: memcache is the in-memory adapter of the ubgo/cache
+// family. This file holds the authoritative package overview; the
+// `// Package memcache ...` comment below is the godoc entry — do not
+// duplicate it in other files.
+//
+// This file: package-level documentation only (no code). It describes
+// sharding, the two eviction policies, and the opt-in durability layers
+// (checkpoint vs AOF) with a runnable usage example.
+//
+// AI-context: documentation-only file; behaviour lives in memcache.go,
+// policy.go, snapshot.go, aof.go, options.go. Read this first for the
+// mental model, then the implementation files.
+
 // Package memcache is the in-memory adapter for github.com/ubgo/cache: a
 // sharded, weight-aware cache with lazy + background TTL expiry, two pluggable
 // eviction policies, and optional snapshot / checkpoint / append-only-file

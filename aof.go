@@ -1,3 +1,23 @@
+// aof.go — append-only-file durability: frame format, replay, compaction (package memcache, github.com/ubgo/cache-mem).
+//
+// Package role: memcache is the in-memory adapter of the ubgo/cache
+// family. See doc.go for the package overview.
+//
+// This file: the AOF wire format and its log type. Every mutating write
+// (Set/SetMulti/SetNX/Expire/Incr/Decr/Del/Flush) is fsync-appended via
+// aofAppend. encodeFrame/readFrame implement the frame layout; replayAOF
+// rebuilds memory on New; CompactAOF rewrites the log to one Set per live
+// entry (atomic temp-file + rename) to bound growth.
+//
+// AI-context: the frozen wire format is length-prefixed self-contained
+// gob frames — [uint32 big-endian len][gob body] per record, NOT one
+// continuous gob stream. This is deliberate: independent frames make
+// CompactAOF's concatenation safe and let a crash-truncated tail be
+// detected as a short read (io.ErrUnexpectedEOF) and silently dropped,
+// keeping every valid prefix. aofLog.append fsyncs on every write (one
+// sync per write) — that throughput cost IS the point of AOF. The log
+// type and aofAppend are nil-safe (no-op when WithAOF was not set).
+
 package memcache
 
 import (

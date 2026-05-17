@@ -1,3 +1,5 @@
+// hitrate_test.go — tests comparing LRU vs Adaptive W-TinyLFU hit rates on skewed / scan workloads.
+
 package memcache_test
 
 import (

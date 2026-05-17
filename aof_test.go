@@ -1,3 +1,5 @@
+// aof_test.go — tests for append-only-file durability: append, replay, truncated-tail recovery, and CompactAOF.
+
 package memcache_test
 
 import (

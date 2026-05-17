@@ -1,3 +1,21 @@
+// options.go — functional options + resolved config for the cache (package memcache, github.com/ubgo/cache-mem).
+//
+// Package role: memcache is the in-memory adapter of the ubgo/cache
+// family. See doc.go for the package overview.
+//
+// This file: the config struct (resolved option set), the Option type,
+// every WithX constructor option (WithShards/WithMaxEntries/WithMaxBytes/
+// WithWeigher/WithOnEvict/WithSweepInterval/WithClock/WithCheckpoint/
+// WithAOF/WithPolicy), defaults(), and nextPow2. Zero-valued caps and
+// intervals mean "feature disabled" (unbounded / lazy-only / no
+// persistence). nextPow2 enforces the power-of-two shard-count invariant
+// that shardFor depends on.
+//
+// AI-context: pure config plumbing — options mutate a config, New
+// consumes it once. Note defaults() sets policy to AdaptiveWTinyLFU
+// EXPLICITLY (not via the LRU iota zero value) — W-TinyLFU is the
+// intended default; relying on the zero value would silently flip it.
+
 package memcache
 
 import (

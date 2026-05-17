@@ -1,3 +1,5 @@
+// memcache_test.go — tests for core cache.Cache behavior (get/set/del/ttl/eviction/sharding/concurrency).
+
 package memcache_test
 
 import (

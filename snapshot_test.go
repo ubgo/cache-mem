@@ -1,3 +1,5 @@
+// snapshot_test.go — tests for SnapshotTo / RestoreFrom and the remaining-TTL invariant.
+
 package memcache_test
 
 import (

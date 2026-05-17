@@ -1,3 +1,21 @@
+// snapshot.go — gob snapshot / restore / atomic checkpoint loop (package memcache, github.com/ubgo/cache-mem).
+//
+// Package role: memcache is the in-memory adapter of the ubgo/cache
+// family. See doc.go for the package overview.
+//
+// This file: SnapshotTo / RestoreFrom / RestoreFromFile and the periodic
+// writeCheckpoint + checkpointLoop. The on-disk form (snapEntry) is a gob
+// stream of live entries. writeCheckpoint writes a temp file then renames
+// over the target so a crash mid-write never leaves a truncated
+// checkpoint. RestoreFromFile treats a missing file as a cold start
+// (0, nil).
+//
+// AI-context: the load-bearing invariant is the remaining-TTL rule — TTL
+// is persisted as the *remaining* duration at snapshot time (0 = no
+// expiry), never the absolute deadline, so a restored entry expires
+// relative to restore time and can never outlive its original deadline.
+// Entries whose remaining TTL already elapsed are skipped on restore.
+
 package memcache
 
 import (
