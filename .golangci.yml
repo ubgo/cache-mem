@@ -1,0 +1,28 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  default: standard
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - revive
+    - misspell
+    - unconvert
+    - gocritic
+  exclusions:
+    rules:
+      # ctx is part of the cache.Cache contract; adapters that don't consult
+      # it still must keep the named parameter for interface compliance.
+      - linters: [revive]
+        text: "unused-parameter: parameter 'ctx'"
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
