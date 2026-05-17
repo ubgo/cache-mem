@@ -17,14 +17,12 @@ jobs:
         with:
           go-version: "1.24"
           cache: true
-      # cache-mem depends on github.com/ubgo/cache. Until that module is
-      # tagged, CI checks out the sibling repo so the go.mod replace resolves.
-      - name: checkout ubgo/cache sibling
-        uses: actions/checkout@v6
-        with:
-          repository: ubgo/cache
-          path: ../cache
+      # Cross-module deps (github.com/ubgo/cache, ...) resolve from their
+      # published pseudo-versions via the default module proxy — no sibling
+      # checkout or replace directive needed.
       - name: vet
         run: go vet ./...
+      - name: gofmt
+        run: test -z "$(gofmt -l .)"
       - name: test (race + coverage)
         run: go test -race -count=2 -coverprofile=cover.out ./...
