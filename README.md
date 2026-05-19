@@ -1,6 +1,8 @@
 # cache-mem
 
-![coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/ubgo/cache-mem.svg)](https://pkg.go.dev/github.com/ubgo/cache-mem) [![Go Report Card](https://goreportcard.com/badge/github.com/ubgo/cache-mem)](https://goreportcard.com/report/github.com/ubgo/cache-mem) [![test](https://github.com/ubgo/cache-mem/actions/workflows/test.yml/badge.svg)](https://github.com/ubgo/cache-mem/actions/workflows/test.yml) [![lint](https://github.com/ubgo/cache-mem/actions/workflows/lint.yml/badge.svg)](https://github.com/ubgo/cache-mem/actions/workflows/lint.yml) ![coverage](https://img.shields.io/badge/coverage-95%25-brightgreen) [![tag](https://img.shields.io/github/v/tag/ubgo/cache-mem?sort=semver)](https://github.com/ubgo/cache-mem/tags) [![license](https://img.shields.io/badge/license-source--available-blue)](./LICENSE) ![Go](https://img.shields.io/badge/go-1.24-00ADD8?logo=go)
+
 
 In-memory cache for Go: sharded LRU / W-TinyLFU, with snapshot & AOF persistence.
 
