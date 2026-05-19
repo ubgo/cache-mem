@@ -26,3 +26,10 @@ jobs:
         run: test -z "$(gofmt -l .)"
       - name: test (race + coverage)
         run: go test -race -count=2 -coverprofile=cover.out ./...
+      - name: coverage floor gate
+        run: |
+          go test -coverprofile=cover.out -covermode=atomic ./...
+          TOTAL=$(go tool cover -func=cover.out | tail -1 | grep -oE '[0-9.]+' | tail -1)
+          FLOOR=92
+          echo "coverage: $TOTAL% (floor: $FLOOR%)"
+          if awk "BEGIN{exit !($TOTAL < $FLOOR)}"; then echo "coverage $TOTAL% below floor $FLOOR%"; exit 1; fi

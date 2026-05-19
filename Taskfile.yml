@@ -19,6 +19,12 @@ tasks:
     cmds:
       - go test -race -count=2 ./...
 
+  cover:
+    desc: Run tests with coverage and print the total
+    cmds:
+      - go test -coverprofile=cover.out -covermode=atomic ./...
+      - go tool cover -func=cover.out | tail -1
+
   test:coverage:
     desc: Run tests with an HTML coverage report
     cmds:
