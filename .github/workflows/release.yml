@@ -1,11 +1,15 @@
+# Manual only (owner's call, 2026-10-13: Actions minutes are a budget). To run automatically again, replace the on: block with:
+#   on:
+#     push:
+#       tags:
+#         - "v*"
+
 name: release
 
 # Dormant until a maintainer pushes a version tag. Builds, tests, and drafts
 # release notes from conventional commits. It never creates or pushes tags.
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write
